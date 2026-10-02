@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#090c10">
+  <meta name="description" content="A desktop browser labyrinth simulator comparing BFS speed with A* safety.">
+  <link rel="stylesheet" href="style.css">
+  <title>W.C.K.D. // Labyrinth Simulator</title>
+</head>
+<body>
+  <section class="desktop-notice" aria-label="Desktop required">
+    <div class="notice-mark">W.C.K.D.</div>
+    <p class="eyebrow">SIMULATION DISPLAY REQUIREMENTS</p>
+    <h1>OPEN ON A<br><span>LAPTOP OR DESKTOP.</span></h1>
+    <p>This labyrinth simulator is designed for a wide screen. Open this same link on a laptop or desktop to use the maze, camera, and controls together.</p>
+  </section>
+  <header class="topbar">
+    <div class="brand"><span class="status-light"></span> W.C.K.D. <span class="slash">//</span> LABYRINTH SIMULATOR</div>
+    <span class="tag">FIELD TEST 07</span>
+  </header>
+
+  <main>
+    <div class="progress-line" aria-live="polite">
+      <span class="eyebrow" id="page-count">PAGE 1 OF 5</span>
+      <div class="progress-track"><span id="progress-fill"></span></div>
+      <span class="eyebrow" id="page-name">ARRIVAL</span>
+    </div>
+
+    <section class="page active" data-page="0" aria-labelledby="welcome-title">
+      <div class="hero panel">
+        <div class="hero-copy">
+          <p class="eyebrow">W.C.K.D. SIMULATION INTERFACE V3.2</p>
+          <h1 id="welcome-title">THE MAZE<br><span>IS WATCHING.</span></h1>
+          <p>One labyrinth. Two agents. One chance to make it out.</p>
+          <button class="primary" id="start">ENTER THE GLADE <span>→</span></button>
+        </div>
+        <div class="hero-stamp"><span>SUBJECT</span><strong>THOMAS</strong><span>STATUS: ACTIVE</span></div>
+      </div>
+    </section>
+
+    <section class="page" data-page="1" aria-labelledby="story-title" hidden>
+      <article class="briefing panel">
+        <p class="eyebrow">STORY MODULE: PROJECT GLADE</p>
+        <h1 id="story-title">THE WORLD ENDS<br>AT THE WALLS.</h1>
+        <div class="story-copy">
+          <p>You wake in a place called the Glade with no memory of how you got there. Towering walls surround the only home you know, and every morning the Maze opens its doors.</p>
+          <p>The Runners venture into its shifting corridors to find a way out. They must return before nightfall: when darkness comes, the Grievers hunt inside.</p>
+          <p>The walls move. Routes that were open can close without warning. And somewhere beyond the stone, W.C.K.D. is watching every choice.</p>
+          <p class="story-last">This is the experiment. You decide who enters the Maze.</p>
+        </div>
+      </article>
+    </section>
+
+    <section class="page simulation-page" data-page="2" aria-labelledby="simulation-title" hidden>
+      <div class="simulation-heading">
+        <div><p class="eyebrow">LIVE EXPERIMENT · SUBJECT THOMAS</p><h1 id="simulation-title">THE LABYRINTH</h1></div>
+        <span class="live-pill"><i></i> LIVE TELEMETRY</span>
+      </div>
+      <section class="simulation-layout">
+        <aside class="control-column">
+          <section class="panel controls">
+            <span class="eyebrow">CHOOSE YOUR RUNNER</span>
+            <div class="agent-buttons">
+              <button class="agent-button bfs" id="run-bfs"><strong>BFS</strong><small>FAST · BLIND</small></button>
+              <button class="agent-button astar" id="run-astar"><strong>A*</strong><small>SAFE · INFORMED</small></button>
+            </div>
+            <button class="secondary full-button" id="human">HUMAN PLAY</button>
+            <div class="manual-controls" aria-label="Player movement controls">
+              <button class="control-key turn-left" data-action="left" aria-label="Turn left">↶</button>
+              <button class="control-key move-forward" data-action="forward" aria-label="Move forward">↑</button>
+              <button class="control-key turn-right" data-action="right" aria-label="Turn right">↷</button>
+              <button class="control-key move-back" data-action="back" aria-label="Move backward">↓</button>
+            </div>
+            <p class="help-text">← → TURN · ↑ ↓ MOVE</p>
+            <div class="button-pair">
+              <button class="secondary night-button" id="night">NIGHT SHIFT</button>
+              <button class="secondary" id="refresh">REFRESH</button>
+            </div>
+            <p class="status-message" id="status">Choose BFS or A*, or enter Human Play.</p>
+          </section>
+          <section class="panel telemetry">
+            <div class="section-head compact-head">
+              <div><span class="eyebrow">W.C.K.D. MONITORING</span><h2>Telemetry</h2></div>
+              <span class="telemetry-dot"></span>
+            </div>
+            <ol id="log" aria-live="polite"><li>System online. New maze ready.</li></ol>
+          </section>
+        </aside>
+
+        <section class="panel pov-panel">
+          <div class="section-head">
+            <div><span class="eyebrow">SUBJECT CAMERA</span><h2>Player point of view</h2></div>
+            <span class="step-counter" id="step-counter">STEP 0</span>
+          </div>
+          <canvas id="pov" aria-label="First-person view down the maze corridor"></canvas>
+          <div class="direction-readout" id="direction">FACING NORTH <span>·</span> EXIT AHEAD</div>
+        </section>
+
+        <section class="panel map-panel">
+          <div class="section-head">
+            <div><span class="eyebrow">OVERHEAD TRACKING</span><h2>Labyrinth map</h2></div>
+            <span class="map-live">LIVE MAP</span>
+          </div>
+          <canvas id="map" aria-label="Overhead maze map"></canvas>
+          <div class="legend">
+            <span><i class="key start-key"></i>GLADE</span>
+            <span><i class="key exit-key"></i>EXIT</span>
+            <span><i class="key danger-key"></i>GRIEVER</span>
+            <span><i class="key wall-key"></i>WALL</span>
+          </div>
+        </section>
+      </section>
+    </section>
+
+    <section class="page" data-page="3" aria-labelledby="comparison-title" hidden>
+      <article class="panel results-page">
+        <p class="eyebrow">EXPERIMENT COMPLETE</p>
+        <h1 id="comparison-title">THE RESULTS</h1>
+        <p class="page-lead">Compare what each agent paid to reach the Exit. Run both agents in the Simulation first to fill the report.</p>
+        <div class="result-grid">
+          <span>MEASURE</span><strong>BFS · BLIND</strong><strong>A* · INFORMED</strong>
+          <span>STEPS TAKEN</span><b id="bfs-steps">—</b><b id="astar-steps">—</b>
+          <span>GRIEVER HITS</span><b id="bfs-danger">—</b><b id="astar-danger">—</b>
+          <span>TOTAL COST</span><b id="bfs-cost">—</b><b id="astar-cost">—</b>
+        </div>
+        <div class="conclusion-card">
+          <span class="eyebrow">AUTOMATED FINDING</span>
+          <p class="result-summary" id="summary">Run BFS and A* on the Simulation page. Their completed runs will be compared here.</p>
+        </div>
+      </article>
+    </section>
+
+    <section class="page" data-page="4" aria-labelledby="about-title" hidden>
+      <article class="panel explainer">
+        <p class="eyebrow">AFTER-ACTION BRIEFING</p>
+        <h1 id="about-title">WHAT THE MAZE<br>TAUGHT US</h1>
+        <div class="explanation-grid">
+          <section class="explanation-card bfs-card">
+            <span class="algorithm-mark">BFS</span>
+            <h2>Blind speed</h2>
+            <p>Breadth-first search checks nearby corridors first, then farther ones. It finds a route with the fewest moves, but it does not consider danger. A Griever corridor looks like any other open cell.</p>
+          </section>
+          <section class="explanation-card astar-card">
+            <span class="algorithm-mark">A*</span>
+            <h2>Informed judgment</h2>
+            <p>A* considers the distance already traveled and an estimate of the distance remaining. In this experiment, a large danger penalty makes it choose a Griever-free route whenever one exists—even if that route is longer.</p>
+          </section>
+          <section class="explanation-card night-card">
+            <span class="algorithm-mark">NIGHT SHIFT</span>
+            <h2>Adapt when the Maze changes</h2>
+            <p>Night Shift collapses a corridor while an agent is moving. The agent must detect the blocked route and plan again from its current position instead of starting over at the Glade.</p>
+          </section>
+          <section class="explanation-card human-card">
+            <span class="algorithm-mark">HUMAN PLAY</span>
+            <h2>Your turn in the Maze</h2>
+            <p>Take control of the runner with the turn and move buttons. Walls block movement, and stepping into a Griever ends the run. Refresh creates a new maze for another attempt.</p>
+          </section>
+        </div>
+        <p class="closing-line">A good agent does more than find an exit. It weighs the risk—and adapts when the world changes.</p>
+      </article>
+    </section>
+
+    <nav class="page-nav" aria-label="Page navigation">
+      <button class="secondary nav-button" id="back" disabled>← BACK</button>
+      <span class="nav-hint" id="nav-hint">Begin the briefing</span>
+      <button class="primary nav-button" id="next">NEXT →</button>
+    </nav>
+  </main>
+
+  <footer>W.C.K.D. // CONTROL IS AN ILLUSION</footer>
+  <script src="game.js"></script>
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.getRegistrations().then(registrations =>
+        registrations.forEach(registration => registration.unregister())
+      );
+    }
+    if ("caches" in window) {
+      caches.keys().then(keys =>
+        keys.filter(key => key.startsWith("wkcd-labyrinth-")).forEach(key => caches.delete(key))
+      );
+    }
+  </script>
+</body>
+</html>
